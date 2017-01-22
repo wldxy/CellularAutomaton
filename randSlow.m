@@ -1,5 +1,5 @@
 function new_v = randSlow(v)
-    p = 0.2;
+    p = 0.3;
     p_rand = rand();
     if p_rand < p
         v = max(v-1, 0);

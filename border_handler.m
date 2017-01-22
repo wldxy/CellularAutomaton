@@ -4,7 +4,7 @@ function [new_car, new_v] = border_handler(car, v, B, r_s, r_e)
             k = rand();
             if k > 0.3
                 car(i, 1) = 1;
-                v(i, 1) = 0;
+                v(i, 1) = 3;
             end
         end
     end

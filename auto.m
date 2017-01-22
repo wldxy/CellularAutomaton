@@ -31,6 +31,7 @@ B = 3;
 L = 7;
 len = 101;
 middle = floor(len/2) + 1;
+waitlen = 10;
 road_s = (L-B)/2 + 1;
 road_e = (L-B)/2 + B;
 toll = [5, 8, 10, 10, 10, 8, 5];
@@ -56,33 +57,45 @@ stop = 0;
 run = 0;
 freeze = 0;
 
+rate = 1;
+plus = zeros(1, L);
+for i = 1 : L
+    plus(i) = exp((i-1)*rate);
+end
+
 v = zeros(L, len);
 car = zeros(L, len);
+line = zeros(L, len);
 vmax = 5;
+wait = zeros(1, L);
 while (stop == 0)
     if (run == 1)
         [car, v] = border_handler(car, v, B, road_s, road_e);
-        for j = len :-1 : 1
-            for i = 1 : L
-                if map(i, j) == 1 && car(i, j) ~= 0 
-                    v(i, j) = min(v(i, j) + 1, vmax);
-                    p = findNextCar(car, i, j, vmax);
-                    d = p - j;
-                    v(i, j) = min(v(i, j), d);
-                    v(i, j) = randSlow(v(i, j));
-                    
-                    new_v = v(i, j);
-                    new_j = j+v(i, j);
-                    if new_j <= len
-                        car(i, new_j) = 1;
-                        v(i, new_j) = new_v;
-                    end
-                    
-                    car(i, j) = 0;
-                    v(i, j) = 0;
+        
+        count = zeros(1, L);
+        for i = 1 : L
+            for j = middle-toll(i) : middle
+                if car(i, j) == 1
+                    count(i) = count(i) + 1;
                 end
             end
         end
+            
+        for j = middle-1 : -1 : middle-waitlen-1
+            for i = 1 : L
+                if map(i, j) == 1 && car(i, j) ~= 0
+                    [new_i, new_j, car, v] = enterRun(car, v, vmax, i, j, count, map, plus, middle);
+                end
+            end
+        end  
+        
+        for j = middle-waitlen-2 : -1 : 1
+            for i = road_s : road_e
+                if map(i, j) == 1 && car(i, j) ~= 0
+                    [new_i, new_j, car, v] = normalRun(car, v, vmax, i, j);
+                end
+            end            
+        end 
         
         ceils = car;
         set(imh, 'cdata', cat(3, z, map, ceils));
@@ -97,5 +110,3 @@ while (stop == 0)
     pause(0.1);
     drawnow
 end
-
-
