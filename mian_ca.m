@@ -30,30 +30,21 @@ number=uicontrol('style','text',...
 B = 3;
 L = 7;
 len = 101;
-time = [2, 2, 2, 2, 2, 2, 2];
+% time = [2, 2, 2, 2, 2, 2, 2];
+time = ones(1, 7) * 3;
 middle = floor(len/2) + 1;
 side = (L-B)/2;
 waitlen = 10;
 road_s = (L-B)/2 + 1;
 road_e = (L-B)/2 + B;
 toll = [5, 8, 10, 10, 10, 8, 5];
-z = ones(L, len);
+% z = ones(L, len);
 map = zeros(L, len);
 map(road_s:road_e, 1:len) = 1;
 map(1:L, middle) = 2;
-ceils = zeros(L, len);
 for i = 1 : length(toll)
     map(i, middle-toll(i)+1: middle+toll(i)-1) = 1;
 end
-
-imh = image(cat(3, z, map, ceils));
-set(gca,'xtick', [0.5: 1: len+0.5]);
-set(gca,'ytick', [0.5: 1: L+0.5]);
-set(gca,'xticklabel', '');
-set(gca,'yticklabel', '');
-axis equal  
-axis tight  
-grid on;
 
 stop = 0;
 run = 0;
@@ -70,6 +61,18 @@ car = zeros(L, len);
 line = zeros(L, len);
 vmax = 5;
 wait = zeros(1, L);
+
+% imh = image(cat(3, z, map, ceils));
+colormap('gray');
+imh = image(generateImage(car, map, wait, middle));
+set(gca,'xtick', [0.5: 1: len+0.5]);
+set(gca,'ytick', [0.5: 1: L+0.5]);
+set(gca,'xticklabel', '');
+set(gca,'yticklabel', '');
+axis equal  
+axis tight  
+grid on;
+
 while (stop == 0)
     if (run == 1)
         [car, v] = border_handler(car, v, B, road_s, road_e);
@@ -142,8 +145,7 @@ while (stop == 0)
             end            
         end 
         
-        ceils = car;
-        set(imh, 'cdata', cat(3, z, map, ceils));
+        set(imh, 'cdata', generateImage(car, map, wait, middle));
         stepnumber=1+str2num(get(number,'string'));  
         set(number,'string',num2str(stepnumber))  
     end

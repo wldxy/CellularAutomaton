@@ -6,11 +6,11 @@ function [new_i, new_j, new_car, new_v] = mergeRun(car, v, map, vmax, i, j)
             p = findLastCar(car, i+1, j, vmax);
             d = j - p;
             if d > v(i+1, j)
-                i = i+1;
                 car(i+1 ,j) = 1;
                 v(i+1, j) = v(i, j);
                 car(i, j) = 0;
                 v(i, j) = 0;
+                i = i+1;
             end
         end
     else
@@ -18,11 +18,11 @@ function [new_i, new_j, new_car, new_v] = mergeRun(car, v, map, vmax, i, j)
             p = findLastCar(car, i-1, j, vmax);
             d = j - p;
             if d > v(i-1, j)
-                i = i-1;
                 car(i-1 ,j) = 1;
                 v(i-1, j) = v(i, j);
                 car(i, j) = 0;
                 v(i, j) = 0;
+                i = i-1;
             end
         end
     end
