@@ -41,7 +41,7 @@ map(road_s:road_e, 1:len) = 1;
 map(1:L, middle) = 2;
 ceils = zeros(L, len);
 for i = 1 : length(toll)
-    map(i, middle-toll(i)-1: middle+toll(i)+1) = 1;
+    map(i, middle-toll(i)+1: middle+toll(i)-1) = 1;
 end
 
 imh = image(cat(3, z, map, ceils));
@@ -84,7 +84,7 @@ while (stop == 0)
         for j = middle-1 : -1 : middle-waitlen-1
             for i = 1 : L
                 if map(i, j) == 1 && car(i, j) ~= 0
-                    [new_i, new_j, car, v] = enterRun(car, v, vmax, i, j, count, map, plus, middle);
+                    [new_i, new_j, car, v] = enterRun(car, v, vmax, i, j, toll, count, map, plus, middle);
                 end
             end
         end  

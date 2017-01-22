@@ -1,4 +1,4 @@
-function [new_i, new_j, new_car, new_v] = enterRun(car, v, vmax, i, j, count, map, plus, middle)
+function [new_i, new_j, new_car, new_v] = enterRun(car, v, vmax, i, j, toll, count, map, plus, middle)
     [L, len] = size(car);
 
     p_turn = zeros(1, 3);
@@ -7,7 +7,8 @@ function [new_i, new_j, new_car, new_v] = enterRun(car, v, vmax, i, j, count, ma
         if p_l ~= -1
             d_l = j - p_l;
             if d_l > v(i-1, p_l) && d_l > 1
-                p_turn(1) = plus(2)*count(i-1);
+                extra = toll(i-1)-count(i-1);
+                p_turn(1) = plus(2)*extra;
             end
         end
     end
@@ -17,7 +18,8 @@ function [new_i, new_j, new_car, new_v] = enterRun(car, v, vmax, i, j, count, ma
         if p_r ~= -1
             d_r = j - p_r;
             if d_r > v(i+1, p_r) && d_r > 1
-                p_turn(3) = plus(2)*count(i+1);
+                extra = toll(i+1) - count(i+1);
+                p_turn(3) = plus(2)*extra;
             end
         end
     end
