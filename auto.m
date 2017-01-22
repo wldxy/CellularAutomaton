@@ -32,6 +32,7 @@ L = 7;
 len = 101;
 time = [2, 2, 2, 2, 2, 2, 2];
 middle = floor(len/2) + 1;
+side = (L-B)/2;
 waitlen = 10;
 road_s = (L-B)/2 + 1;
 road_e = (L-B)/2 + B;
@@ -72,6 +73,34 @@ wait = zeros(1, L);
 while (stop == 0)
     if (run == 1)
         [car, v] = border_handler(car, v, B, road_s, road_e);
+        
+        for j = len : -1 : middle+waitlen+2
+            for i = road_s : road_e
+                if map(i, j) == 1 && car(i, j) ~= 0
+                    [new_i, new_j, car, v] = normalRun(car, v, vmax, i, j);
+                end
+            end             
+        end
+        
+        for j = middle+waitlen+1 : -1 : middle+1
+            for i = 1 : road_s-1
+                if car(i, j) == 1
+                    [new_i, new_j, car, v] = mergeRun(car, v, map, vmax, i, j);
+                end
+            end
+            
+            for i = L : -1 : road_e+1
+                if car(i, j) == 1
+                    [new_i, new_j, car, v] = mergeRun(car, v, map, vmax, i, j);
+                end
+            end
+            
+            for i = road_s : road_e
+                if map(i, j) == 1 && car(i, j) ~= 0
+                    [new_i, new_j, car, v] = normalRun(car, v, vmax, i, j);
+                end
+            end     
+        end
         
         count = zeros(1, L);
         for i = 1 : L
