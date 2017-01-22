@@ -66,7 +66,7 @@ function [new_i, new_j, new_car, new_v] = enterRun(car, v, vmax, i, j, toll, cou
     new_i = i;
     new_j = j+v(i, j);
     
-    if new_j > middle
+    if new_j >= middle
         new_j = middle;
         car(i, new_j) = 1;
         v(i, new_j) = 0;

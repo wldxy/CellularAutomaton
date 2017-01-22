@@ -30,6 +30,7 @@ number=uicontrol('style','text',...
 B = 3;
 L = 7;
 len = 101;
+time = [2, 2, 2, 2, 2, 2, 2];
 middle = floor(len/2) + 1;
 waitlen = 10;
 road_s = (L-B)/2 + 1;
@@ -80,7 +81,22 @@ while (stop == 0)
                 end
             end
         end
-            
+        
+        for i = 1 : L
+            if car(i, middle) == 1
+                if wait(i) < time(i) && wait(i) ~= -1
+                    wait(i) = wait(i) + 1;
+                else
+                    [new_i, new_j, car, v] = normalRun(car, v, vmax, i, j);
+                    if new_i == i && new_j == j
+                        wait(i) = -1;
+                    else
+                        wait(i) = 0;
+                    end
+                end
+            end
+        end
+        
         for j = middle-1 : -1 : middle-waitlen-1
             for i = 1 : L
                 if map(i, j) == 1 && car(i, j) ~= 0

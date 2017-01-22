@@ -1,6 +1,6 @@
 function [new_i, new_j, new_car, new_v] = normalRun(car, v, vmax, i, j)
     [L, len] = size(car);
-
+    
     v(i, j) = min(v(i, j) + 1, vmax);
     p = findNextCar(car, i, j, vmax);
     d = p - j - 1;
