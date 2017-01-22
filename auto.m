@@ -28,15 +28,19 @@ number=uicontrol('style','text',...
     'position',[20,400,50,20]);  
 
 B = 3;
-L = 6;
-len = 100;
-toll = [10, 10, 10, 8, 5, 3];
+L = 7;
+len = 101;
+middle = floor(len/2) + 1;
+road_s = (L-B)/2 + 1;
+road_e = (L-B)/2 + B;
+toll = [5, 8, 10, 10, 10, 8, 5];
 z = ones(L, len);
 map = zeros(L, len);
-map(1:B, 1:len) = 1;
+map(road_s:road_e, 1:len) = 1;
+map(1:L, middle) = 2;
 ceils = zeros(L, len);
 for i = 1 : length(toll)
-    map(i, len/2-toll(i): len/2+toll(i)) = 1;
+    map(i, middle-toll(i)-1: middle+toll(i)+1) = 1;
 end
 
 imh = image(cat(3, z, map, ceils));
@@ -57,14 +61,15 @@ car = zeros(L, len);
 vmax = 5;
 while (stop == 0)
     if (run == 1)
-        [car, v] = border_handler(car, v, B);
+        [car, v] = border_handler(car, v, B, road_s, road_e);
         for j = len :-1 : 1
             for i = 1 : L
                 if map(i, j) == 1 && car(i, j) ~= 0 
                     v(i, j) = min(v(i, j) + 1, vmax);
-                    p = findNextCar(car, i, j);
-                    d = p - i;
-                    v(i,  j) = min(v(i, j), d);
+                    p = findNextCar(car, i, j, vmax);
+                    d = p - j;
+                    v(i, j) = min(v(i, j), d);
+                    v(i, j) = randSlow(v(i, j));
                     
                     new_v = v(i, j);
                     new_j = j+v(i, j);
