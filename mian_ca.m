@@ -29,9 +29,10 @@ number=uicontrol('style','text',...
 
 B = 3;
 L = 7;
+p = 0.6;
 len = 101;
-% time = [2, 2, 2, 2, 2, 2, 2];
-time = ones(1, 7) * 3;
+time = [1, 1, 3, 3, 3, 1, 1];
+% time = ones(1, 7) * 3;
 middle = floor(len/2) + 1;
 side = (L-B)/2;
 waitlen = 10;
@@ -56,6 +57,13 @@ for i = 1 : L
     plus(i) = exp((i-1)*rate);
 end
 
+global vdown;
+global vdownlist;
+vdown = zeros(L, len);
+vdownlist = [];
+
+road = [];
+
 v = zeros(L, len);
 car = zeros(L, len);
 line = zeros(L, len);
@@ -75,7 +83,7 @@ grid on;
 
 while (stop == 0)
     if (run == 1)
-        [car, v] = border_handler(car, v, B, road_s, road_e);
+        [car, v] = border_handler(car, v, B, road_s, road_e, p);
         
         for j = len : -1 : middle+waitlen+2
             for i = road_s : road_e
@@ -147,13 +155,14 @@ while (stop == 0)
         
         set(imh, 'cdata', generateImage(car, map, wait, middle));
         stepnumber=1+str2num(get(number,'string'));  
-        set(number,'string',num2str(stepnumber))  
+        set(number,'string',num2str(stepnumber));
+        road = [road ; car(3, :)];
     end
     
     if (freeze == 1)
         run = 0;
         freeze = 0;
     end
-    pause(0.1);
+%     pause(0.1);
     drawnow
 end

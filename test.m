@@ -7,6 +7,11 @@
 % colormap(gray);
 % image(c);
 
-a = ones(10) / 10;
-b = ones(10);
-c = ones(10);
+% a = ones(10) / 10;
+% b = ones(10);
+% c = ones(10);
+
+clc, clear all
+a = 1;
+global a;
+testShow();
