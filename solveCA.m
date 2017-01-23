@@ -2,7 +2,7 @@ function solveCA(p)
     B = 3;
     L = 7;
     len = 101;
-    toll = [8, 15, 20, 20, 20, 15, 8];
+    toll = [3, 8, 10, 10, 10, 8, 3];
     time = [3, 3, 3, 3, 3, 3, 3];
     % B = 6;
     % L = 10;
@@ -83,15 +83,15 @@ function solveCA(p)
             for j = middle+waitlen+1 : -1 : middle+1
                 for i = 1 : road_s-1
                     if car(i, j) == 1
-%                         [new_i, new_j, car, v] = mergeRun(car, map, v, vmax, i, j);
-                        [new_i, new_j, car, v] = mergeRunV2(car, map, v, vmax, i, j);
+                        [new_i, new_j, car, v] = mergeRun(car, map, v, vmax, i, j);
+%                         [new_i, new_j, car, v] = mergeRunV2(car, map, v, vmax, i, j);
                     end
                 end
 
                 for i = L : -1 : road_e+1
                     if car(i, j) == 1
-%                         [new_i, new_j, car, v] = mergeRun(car, map, v, vmax, i, j);
-                        [new_i, new_j, car, v] = mergeRunV2(car, map, v, vmax, i, j);
+                        [new_i, new_j, car, v] = mergeRun(car, map, v, vmax, i, j);
+%                         [new_i, new_j, car, v] = mergeRunV2(car, map, v, vmax, i, j);
                     end
                 end
 

@@ -12,7 +12,7 @@ global runlist
 global stoplist
 global times
 
-for i = 0.4 : 0.01 : 0.6
+for i = 0.45 : 0.01 : 0.65
     for j = 1 : 10
         solveCA(i);
         disp(i)
