@@ -12,8 +12,8 @@ global runlist
 global stoplist
 global times
 
-for i = 0.45 : 0.01 : 0.65
-    for j = 1 : 10
+for i = 0.45 : 0.01 : 0.85
+    for j = 1 : 5
         solveCA(i);
         disp(i)
         carflow = numcar / 10;
