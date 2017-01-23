@@ -47,6 +47,25 @@ for i = 1 : length(toll)
     map(i, middle-toll(i)+1: middle+toll(i)-1) = 1;
 end
 
+% global vdown;
+% global vdownlist;
+% vdown = zeros(L, len);
+% vdownlist = [];
+global numcar
+global change
+global atime
+global rtime
+global downtime
+global runtime
+global stoptime
+numcar = 0;
+atime = 0;
+rtime = [];
+change = 0;
+downtime = 0;
+runtime = zeros(L, len);
+stoptime = zeros(L, len);
+
 stop = 0;
 run = 0;
 freeze = 0;
@@ -56,11 +75,6 @@ plus = zeros(1, L);
 for i = 1 : L
     plus(i) = exp((i-1)*rate);
 end
-
-global vdown;
-global vdownlist;
-vdown = zeros(L, len);
-vdownlist = [];
 
 road = [];
 
@@ -88,7 +102,7 @@ while (stop == 0)
         for j = len : -1 : middle+waitlen+2
             for i = road_s : road_e
                 if map(i, j) == 1 && car(i, j) ~= 0
-                    [new_i, new_j, car, v] = normalRun(car, v, vmax, i, j);
+                    [new_i, new_j, car, v] = normalRun(car, map, v, vmax, i, j);
                 end
             end             
         end
@@ -96,19 +110,19 @@ while (stop == 0)
         for j = middle+waitlen+1 : -1 : middle+1
             for i = 1 : road_s-1
                 if car(i, j) == 1
-                    [new_i, new_j, car, v] = mergeRun(car, v, map, vmax, i, j);
+                    [new_i, new_j, car, v] = mergeRun(car, map, v, vmax, i, j);
                 end
             end
             
             for i = L : -1 : road_e+1
                 if car(i, j) == 1
-                    [new_i, new_j, car, v] = mergeRun(car, v, map, vmax, i, j);
+                    [new_i, new_j, car, v] = mergeRun(car, map, v, vmax, i, j);
                 end
             end
             
             for i = road_s : road_e
                 if map(i, j) == 1 && car(i, j) ~= 0
-                    [new_i, new_j, car, v] = normalRun(car, v, vmax, i, j);
+                    [new_i, new_j, car, v] = normalRun(car, map, v, vmax, i, j);
                 end
             end     
         end
@@ -127,7 +141,7 @@ while (stop == 0)
                 if wait(i) < time(i) && wait(i) ~= -1
                     wait(i) = wait(i) + 1;
                 else
-                    [new_i, new_j, car, v] = normalRun(car, v, vmax, i, j);
+                    [new_i, new_j, car, v] = normalRun(car, map, v, vmax, i, j);
                     if new_i == i && new_j == j
                         wait(i) = -1;
                     else
@@ -140,7 +154,7 @@ while (stop == 0)
         for j = middle-1 : -1 : middle-waitlen-1
             for i = 1 : L
                 if map(i, j) == 1 && car(i, j) ~= 0
-                    [new_i, new_j, car, v] = enterRun(car, v, vmax, i, j, toll, count, map, plus, middle);
+                    [new_i, new_j, car, v] = enterRun(car, map, v, vmax, i, j, toll, count, plus);
                 end
             end
         end  
@@ -148,7 +162,7 @@ while (stop == 0)
         for j = middle-waitlen-2 : -1 : 1
             for i = road_s : road_e
                 if map(i, j) == 1 && car(i, j) ~= 0
-                    [new_i, new_j, car, v] = normalRun(car, v, vmax, i, j);
+                    [new_i, new_j, car, v] = normalRun(car, map, v, vmax, i, j);
                 end
             end            
         end 
@@ -163,6 +177,6 @@ while (stop == 0)
         run = 0;
         freeze = 0;
     end
-%     pause(0.1);
+    pause(0.1);
     drawnow
 end
