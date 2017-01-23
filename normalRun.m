@@ -4,9 +4,18 @@ function [new_i, new_j, new_car, new_v] = normalRun(car, map, v, vmax, i, j)
     
     v(i, j) = min(v(i, j) + 1, vmax);
     p = findNextStop(car, map, i, j, vmax);
-    d = p - j - 1;
+    d = p - j - 1;  
     v(i, j) = min(v(i, j), d);
     v(i, j) = randSlow(v(i, j));
+    
+    global stoptime
+    global runtime
+    global runlist
+    global stoplist
+    if (v(i, j) == 0)
+        stoptime(i, j) = stoptime(i, j)+1;
+    end
+    runtime(i, j) = runtime(i, j)+1;
     
     new_v = v(i, j);
     new_i = i;
@@ -19,6 +28,9 @@ function [new_i, new_j, new_car, new_v] = normalRun(car, map, v, vmax, i, j)
         if new_j <= len
             car(i, new_j) = 1;
             v(i, new_j) = new_v;
+        else
+            runlist = [runlist, runtime(i, j)];
+            stoplist = [stoplist, stoptime(i, j)];
         end
     end
     
@@ -26,6 +38,7 @@ function [new_i, new_j, new_car, new_v] = normalRun(car, map, v, vmax, i, j)
         car(i, j) = 0;
         v(i, j) = 0;
     end
+    moveCar(i, j, new_i, new_j);
     
     new_car = car;
     new_v = v;

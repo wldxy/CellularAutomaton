@@ -31,14 +31,14 @@ B = 3;
 L = 7;
 p = 0.6;
 len = 101;
-time = [1, 1, 3, 3, 3, 1, 1];
+time = [3, 3, 3, 3, 3, 3, 3];
 % time = ones(1, 7) * 3;
 middle = floor(len/2) + 1;
 side = (L-B)/2;
 waitlen = 10;
 road_s = (L-B)/2 + 1;
 road_e = (L-B)/2 + B;
-toll = [5, 8, 10, 10, 10, 8, 5];
+toll = [8, 15, 20, 20, 20, 15, 8];
 % z = ones(L, len);
 map = zeros(L, len);
 map(road_s:road_e, 1:len) = 1;
@@ -58,6 +58,8 @@ global rtime
 global downtime
 global runtime
 global stoptime
+global runlist
+global stoplist
 numcar = 0;
 atime = 0;
 rtime = [];
@@ -65,6 +67,8 @@ change = 0;
 downtime = 0;
 runtime = zeros(L, len);
 stoptime = zeros(L, len);
+runlist = [];
+stoplist = [];
 
 stop = 0;
 run = 0;
@@ -177,6 +181,6 @@ while (stop == 0)
         run = 0;
         freeze = 0;
     end
-    pause(0.1);
+%     pause(0.1);
     drawnow
 end
