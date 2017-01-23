@@ -5,6 +5,13 @@ function [new_i, new_j, new_car, new_v] = normalRun(car, map, v, vmax, i, j)
     v(i, j) = min(v(i, j) + 1, vmax);
     p = findNextStop(car, map, i, j, vmax);
     d = p - j - 1;  
+    if (v(i, j) > d)
+        global downtime
+        downtime = downtime + 1;
+    end
+    global alltime
+    alltime = alltime + d / (v(i, j)+1);
+    
     v(i, j) = min(v(i, j), d);
     v(i, j) = randSlow(v(i, j));
     

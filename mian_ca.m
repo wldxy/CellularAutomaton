@@ -29,16 +29,22 @@ number=uicontrol('style','text',...
 
 B = 3;
 L = 7;
-p = 0.6;
 len = 101;
+toll = [8, 15, 20, 20, 20, 15, 8];
 time = [3, 3, 3, 3, 3, 3, 3];
+% B = 6;
+% L = 10;
+% len = 51;
+% toll = [12, 15, 20, 20, 20, 20, 20, 20, 15, 12];
+% time = ones(1, 10)*3;
+
+p = 0.6;
 % time = ones(1, 7) * 3;
 middle = floor(len/2) + 1;
 side = (L-B)/2;
-waitlen = 10;
 road_s = (L-B)/2 + 1;
 road_e = (L-B)/2 + B;
-toll = [8, 15, 20, 20, 20, 15, 8];
+waitlen = toll(road_s);
 % z = ones(L, len);
 map = zeros(L, len);
 map(road_s:road_e, 1:len) = 1;
@@ -51,18 +57,20 @@ end
 % global vdownlist;
 % vdown = zeros(L, len);
 % vdownlist = [];
+global times
 global numcar
 global change
-global atime
-global rtime
+global distlist
+global alltime
 global downtime
 global runtime
 global stoptime
 global runlist
 global stoplist
 numcar = 0;
-atime = 0;
-rtime = [];
+times = 0;
+alltime = 0;
+distlist = [];
 change = 0;
 downtime = 0;
 runtime = zeros(L, len);
@@ -102,7 +110,7 @@ grid on;
 while (stop == 0)
     if (run == 1)
         [car, v] = border_handler(car, v, B, road_s, road_e, p);
-        
+        alltime = 0;
         for j = len : -1 : middle+waitlen+2
             for i = road_s : road_e
                 if map(i, j) == 1 && car(i, j) ~= 0
@@ -114,13 +122,15 @@ while (stop == 0)
         for j = middle+waitlen+1 : -1 : middle+1
             for i = 1 : road_s-1
                 if car(i, j) == 1
-                    [new_i, new_j, car, v] = mergeRun(car, map, v, vmax, i, j);
+%                     [new_i, new_j, car, v] = mergeRun(car, map, v, vmax, i, j);
+                    [new_i, new_j, car, v] = mergeRunV2(car, map, v, vmax, i, j);
                 end
             end
             
             for i = L : -1 : road_e+1
                 if car(i, j) == 1
-                    [new_i, new_j, car, v] = mergeRun(car, map, v, vmax, i, j);
+%                     [new_i, new_j, car, v] = mergeRun(car, map, v, vmax, i, j);
+                    [new_i, new_j, car, v] = mergeRunV2(car, map, v, vmax, i, j);
                 end
             end
             
@@ -175,12 +185,18 @@ while (stop == 0)
         stepnumber=1+str2num(get(number,'string'));  
         set(number,'string',num2str(stepnumber));
         road = [road ; car(3, :)];
+        distlist = [distlist, alltime / numcar];
+        times = times + 1;
+    end
+    
+    if (times == 1000)
+        break;
     end
     
     if (freeze == 1)
         run = 0;
         freeze = 0;
     end
-%     pause(0.1);
+    pause(0.2);
     drawnow
 end

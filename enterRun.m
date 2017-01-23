@@ -1,6 +1,7 @@
 function [new_i, new_j, new_car, new_v] = enterRun(car, map, v, vmax, i, j, toll, count, plus)
     [L, len] = size(car);
-
+    global change;
+    
     p_turn = zeros(1, 3);
     if i > 1 && map(i-1, j) == 1 && car(i-1, j) ~= 1
         p_l = findLastCar(car, i-1, j, vmax);
@@ -9,6 +10,7 @@ function [new_i, new_j, new_car, new_v] = enterRun(car, map, v, vmax, i, j, toll
             if d_l > v(i-1, p_l) && d_l > 1
                 extra = toll(i-1)-count(i-1);
                 p_turn(1) = plus(2)*extra;
+                change = change + 1;
             end
         end
     end
@@ -20,6 +22,7 @@ function [new_i, new_j, new_car, new_v] = enterRun(car, map, v, vmax, i, j, toll
             if d_r > v(i+1, p_r) && d_r > 1
                 extra = toll(i+1) - count(i+1);
                 p_turn(3) = plus(2)*extra;
+                change = change + 1;
             end
         end
     end
